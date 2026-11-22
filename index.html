@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Зал — тренировки</title>
+<meta name="description" content="План тренировок: что делать сегодня, вес с прошлого раза, техника упражнений и календарь с переносом дней. Работает без интернета.">
+<meta name="theme-color" content="#F2F3F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B0D12" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Зал">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app"></div>
+<div id="rest" class="rest" hidden></div>
+<div id="sheet" class="sheet-wrap" hidden><div class="sheet-bg" data-act="close"></div><div class="sheet" role="dialog" aria-modal="true"></div></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript>Для приложения нужен JavaScript.</noscript>
+<script src="plan.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
