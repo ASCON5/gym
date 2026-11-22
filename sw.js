@@ -1,7 +1,7 @@
 // Офлайн: все файлы приложения лежат в кэше. Ответ — сразу из кэша, а в фоне файл скачивается заново:
 // новая версия появляется при следующем запуске. Поменял файлы — подними VERSION.
 importScripts("plan.js"); // EX — отсюда список рисунков
-const VERSION = "gym-v2"; // v2: чужие кэши (тренажёр ОИС на том же сайте) не трогаем
+const VERSION = "gym-v3"; // v2: чужие кэши (тренажёр ОИС на том же сайте) не трогаем; v3: проверка, может ли телефон запоминать
 const MUSCLES = ["front", "back"];
 for (let n = 1; n <= 16; n++) MUSCLES.push(String(n), n + "-s");
 const FILES = ["./", "index.html", "app.css", "app.js", "plan.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"]

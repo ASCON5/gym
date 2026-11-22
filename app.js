@@ -175,6 +175,17 @@
       return null;
     }
   }
+  // Может ли браузер вообще запоминать: в частном режиме Safari или при «Блокировать все cookie» — нет.
+  const canStore = (() => {
+    try {
+      localStorage.setItem("gym.t", "1");
+      const ok = localStorage.getItem("gym.t") === "1";
+      localStorage.removeItem("gym.t");
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  })();
   let db = normalize(load());
   function save() {
     try {
@@ -425,15 +436,25 @@
   }
 
   // ---------- экран: первый запуск ----------
+  // Память у приложения на экране «Домой» своя, не та, что у Safari: открыл с иконки — выбрать себя нужно один раз заново.
+  function storeWarn() {
+    return canStore
+      ? ""
+      : `<div class="alert"><b>Телефон не даёт приложению запоминать.</b> Так бывает в частном режиме Safari или если в Настройках → Safari включено «Блокировать все cookie». Открой ссылку в обычной вкладке или поставь приложение на экран «Домой» и открывай с иконки.</div>`;
+  }
   function viewHello() {
+    const tip = standalone()
+      ? "Выбери один раз — дальше приложение запомнит."
+      : "Лучше поставь приложение на экран «Домой» и открывай с иконки. Там выбери себя ещё раз: у приложения на экране своя память, отдельная от браузера.";
     return `<div class="page hello">
       <img class="logo" src="icon-192.png" alt="">
       <h1>Кто тренируется?</h1>
-      <p>Выбери себя — веса, заметки и прогресс будут твои. Всё хранится только на этом телефоне.</p>
+      <p>Выбери себя — веса, заметки и прогресс будут твои. Всё хранится только на этом телефоне.</p>${storeWarn()}
       <div class="list">${db.people
         .map((p) => `<button class="row" data-act="pick" data-id="${esc(p.id)}"><span class="ava lg">${esc(initial(p.name))}</span><span class="grow t">${esc(p.name)}</span><span class="chev"></span></button>`)
         .join("")}</div>
       <form id="new-person"><input name="n" maxlength="24" placeholder="Другое имя" autocomplete="off" aria-label="Другое имя"><button class="btn primary">Это я</button></form>
+      <p class="hint" style="text-align:left;margin:16px 2px 0">${tip}</p>
     </div>`;
   }
 
@@ -461,6 +482,7 @@
     const nday = DAY.get(db.next.day);
     const first = meName().split(" ")[0];
     let h = `<div class="page tabbed"><header class="head"><div><div class="eyebrow">${cap(fdate(t))} · неделя ${weekOf(t)} из ${PROGRAM.weeks}</div><h1>Привет, ${esc(first)}</h1></div>${whoBtn(true, true)}</header>`;
+    h += storeWarn();
     if (!standalone() && !db.hideInstall) h += installCard();
 
     if (act) {
