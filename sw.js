@@ -1,7 +1,7 @@
 // Офлайн: все файлы приложения лежат в кэше. Ответ — сразу из кэша, а в фоне файл скачивается заново:
 // новая версия появляется при следующем запуске. Поменял файлы — подними VERSION.
 importScripts("plan.js"); // EX — отсюда список рисунков
-const VERSION = "gym-v1";
+const VERSION = "gym-v2"; // v2: чужие кэши (тренажёр ОИС на том же сайте) не трогаем
 const MUSCLES = ["front", "back"];
 for (let n = 1; n <= 16; n++) MUSCLES.push(String(n), n + "-s");
 const FILES = ["./", "index.html", "app.css", "app.js", "plan.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"]
@@ -18,7 +18,8 @@ self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      // На ascon5.github.io живут и другие приложения (тренажёр ОИС): удаляем только свои старые кэши.
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith("gym-") && k !== VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
